@@ -1,5 +1,5 @@
 const auth = require ('../middlewares/auth');
-const controller = require ("../controllers/Users.js");
+const controller = require ("../controllers/UsersController.js");
 
 const UserRoutes = (app) =>{
     app.post('/login', (req,res)=>{
