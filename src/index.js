@@ -2,6 +2,7 @@ const express = require('express');
 const http = require ('http');
 const app= express();
 const server = http.createServer(app);
+const routes = require ('./routes/Users');
 
 //validar si el entorno es de produccion
 if(process.env.Node_ENV !== "production"){
