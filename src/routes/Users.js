@@ -12,3 +12,5 @@ const UserRoutes = (app) =>{
         res.status(200).send("Bienvenido a Beeznes");
     })
 }
+
+module.exports = UserRoutes

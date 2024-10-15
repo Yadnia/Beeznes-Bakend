@@ -2,13 +2,13 @@ const {prisma} = require ('../db.js');
 const bcrypt = require ('bcrypt');
 const jwt = require('jsonwebtoken');
 
-if(process.env.Node_ENV !== "production"){
+if(process.env.NODE_ENV !== "production"){
     require ('dotenv/config');
 }
 
 const {KEY} = process.env;
 
-const registrar = async (req,res)=>{
+const register = async (req,res)=>{
     try {
         if(!req.body){
             res.status(400).send("Debes indicar el usuario y password");
@@ -70,6 +70,7 @@ const login = async (req,res)=>{
             where:{nameUser : nameUser}
         });
         
+        console.log(user)
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign({id: user.id, nameUser:user.nameUser}, KEY, {expiresIn: "2h"});
             user.token = token;
@@ -93,4 +94,4 @@ const login = async (req,res)=>{
     
 }
 
-module.exports = {registrar,login};
+module.exports = {register,login};
