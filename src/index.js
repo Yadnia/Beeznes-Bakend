@@ -3,6 +3,7 @@ const http = require ('http');
 const app= express();
 const server = http.createServer(app);
 const UserRoutes = require('./routes/Users');
+const cookieParser = require ('cookie-parser')
 
 //validar si el entorno es de produccion
 if(process.env.NODE_ENV !== "production"){
@@ -12,7 +13,7 @@ if(process.env.NODE_ENV !== "production"){
 const {PORT} = process.env;
 
 app.use(express.json());
-
+app.use(cookieParser())
 UserRoutes(app);
 
 server.listen(PORT, ()=>{

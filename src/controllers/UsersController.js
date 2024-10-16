@@ -1,6 +1,7 @@
 const {prisma} = require ('../db.js');
 const bcrypt = require ('bcrypt');
 const jwt = require('jsonwebtoken');
+//const {cookieParser} = require ('../index.js');
 
 if(process.env.NODE_ENV !== "production"){
     require ('dotenv/config');
@@ -26,8 +27,6 @@ const register = async (req,res)=>{
                     {correo : correo},
                     {nameUser : nameUser}
                 ]
-                
-                
             }
         });
 
@@ -57,9 +56,7 @@ const register = async (req,res)=>{
 };
 
 const login = async (req,res)=>{
-
     try {
-
         const {nameUser, password} = req.body;
 
         if(!(nameUser && password)){
@@ -70,17 +67,26 @@ const login = async (req,res)=>{
             where:{nameUser : nameUser}
         });
         
-        console.log(user)
         if (user && (await bcrypt.compare(password, user.password))) {
-            const token = jwt.sign({id: user.id, nameUser:user.nameUser}, KEY, {expiresIn: "2h"});
+            const token = jwt.sign({id: user.id, nameUser:user.nameUser}, KEY, {expiresIn: "1h"});
             user.token = token;
+           
+            
+            res.cookie('acces_token', token, {
+                htppOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: 'strict',
+                maxAge: 1000 * 60 * 60 * 1
+            })
+
             return res.status(200).json({
                 id: user.id,
                 nameUser: user.nameUser,
                 correo: user.correo,
-                token: token
-            });
+                token: token,
                 
+            });
+
         }else{
             return res.status(403).send("Credenciales invalidas");
             

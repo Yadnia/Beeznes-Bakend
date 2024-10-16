@@ -7,7 +7,7 @@ if(process.env.NODE_ENV !== "production"){
 const {KEY} = process.env;
 
 const verifyToken = (req,res,next) =>{
-    const token = req.headers["x-acess-token"];
+    const token = req.cookies['access_token']
 
     if(!token){
         return res.status(403).send("No se a enviado el token");
